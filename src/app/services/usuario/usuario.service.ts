@@ -14,7 +14,8 @@ import Swal from 'sweetalert2'
 })
 export class UsuarioService {
 
-    usuarioPendienteDeConfirmación: Usuario;
+    usuario: Usuario;
+    reenvio: boolean;
 
   constructor(
       public http: HttpClient,
@@ -32,13 +33,14 @@ export class UsuarioService {
         return this.http.post(url, usuario)
             .pipe(
                 map( (resp: any) =>{
-                    this.usuarioPendienteDeConfirmación =  resp.usuario;
+                    this.reenvio = false;
+                    this.usuario =  resp.usuario;
                     return resp.usuario
                 }),
                 catchError(err => {
                     if (err) {
                        
-                        console.log(err)
+                        
                         Swal.fire({
                             icon: 'error',
                             title: 'Error al registrar el usuario',
@@ -60,14 +62,15 @@ export class UsuarioService {
             );
     }
 
-    reenviarEmail(usuario: Usuario) {
-
-        const url = URL_SERVICIOS + '/usuario/reenviar_email';
+    reenviarEmail(user_id: string) {
         
-        return this.http.post(url,usuario)
+        const url = URL_SERVICIOS + '/usuario/reenviar_email/' + user_id;
+        
+        return this.http.get(url)
             .pipe(
                 map( (resp: any) => {
-                    this.router.navigate(['/login']);
+                    this.reenvio = true;
+                    this.usuario = resp.usuario;
                     return resp;
                     
                    
@@ -75,7 +78,7 @@ export class UsuarioService {
                 catchError(err => {
                     if (err.status === 409) {
                        
-                        console.log(err)
+                        
                         this.router.navigate(['/login']);
                         Swal.fire({
                             icon: 'success',
@@ -99,27 +102,27 @@ export class UsuarioService {
             .pipe(
                 map( (resp: any) => {
 
-                    this.router.navigate(['/login']);
+                    this.usuario = resp.usuario;
                     return resp;
                 }),
                 catchError(err => {
                     if (err.status === 409) {
                        
-                        console.log(err)
+                        
 
                         this.router.navigate(['/login']);
                         Swal.fire({
                             icon: 'success',
-                            title: 'Inicie Sesión',
+                            title: 'Su cuenta ya fue activada anteriormente',
                             text: err.error.mensaje,
-                            confirmButtonText:'Iniciar Sesión',
+                            confirmButtonText:'Aceptar',
                             confirmButtonColor: '#b3c211'
                         })
                         return throwError(err);
                     }
 
                     if(err) {
-                        console.log(err)
+                        
 
                         this.router.navigate(['/login']);
                         Swal.fire({
@@ -135,19 +138,59 @@ export class UsuarioService {
             );
     }
 
-    
+
+    confirmarEmail(user_id: string) {
+        const url = URL_SERVICIOS + '/usuario/confirmarEmail/' + user_id;
+
+        return this.http.get(url)
+        .pipe(
+            map( (resp: any) => {
+                this.router.navigate(['/login']);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cuenta Activada',
+                    text: 'Su cuenta ha sido activada, ahora ya puede iniciar sesión',
+                    confirmButtonText:'Aceptar',
+                    confirmButtonColor: '#b3c211'
+                })
+                this.usuario = resp.usuario;
+                return resp;
+            }),
+            catchError(err => {
+                if(err.status === 414) {
+                    
+                    this.router.navigate(['/login']);
+                    Swal.fire({
+                        title: 'Error al activar su cuenta',
+                        text: err.error.mensaje,
+                        icon: 'warning',
+                        confirmButtonColor: '#b3c211',
+                        confirmButtonText: 'Reenviar email de activación'
+                    })
+                    .then((reenviar) => {
+                        if (reenviar) {
+                            this.reenvio = true;
+                            this.router.navigate(['/conf_registro/' + err.error.user_id ])
+                        } 
+                    });
+                    return throwError(err);
+                }
+                if(err) {
+                    
+
+                    this.router.navigate(['/login']);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al activar su cuenta',
+                        text: err.error.mensaje,
+                        confirmButtonText:'Aceptar',
+                        confirmButtonColor: '#b3c211'
+                    })
+                    return throwError(err);
+                }
+            })
+        );
+    }
 
 
-    // MANEJO DE ERRORES
-
-//     manejarError(error: HttpErrorResponse) {
-//         if (error.status === 400) {
-//             console.log(this.zone);
-//             this.zone.run(() => this.router.navigate(['/login']));
-//         }
-//         console.log(error);
-//         return throwError(error);
-//         // throw error;
-
-//     }
 }

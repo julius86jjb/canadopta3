@@ -43,6 +43,7 @@ declare function iniciar_plugins();
 export class RegisterComponent implements OnInit {
 
     forma: FormGroup;
+    cargando: boolean = false;
 
 
     constructor(
@@ -87,6 +88,8 @@ export class RegisterComponent implements OnInit {
 
     registrarUsuario() {
 
+        
+
         const Toast = Swal.mixin({
             confirmButtonColor: '#b3c211',
         });
@@ -108,9 +111,12 @@ export class RegisterComponent implements OnInit {
             this.forma.value.password,
             false
         );
-
+        this.cargando = true;
         this._usuarioService.crearUsuario(usuario)
-        .subscribe(resp => this.router.navigate(['/conf_registro']));
+            .subscribe( resp => {
+                this.router.navigate(['/conf_registro'])
+                this.cargando = false;
+            } );
     }
 
 

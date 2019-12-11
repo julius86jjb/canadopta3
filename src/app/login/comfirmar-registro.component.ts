@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../models/usuario.model';
 import { UsuarioService } from '../services/usuario/usuario.service';
+import { Router, ActivatedRoute } from '@angular/router';
 declare function iniciar_plugins();
 
 @Component({
@@ -26,31 +27,56 @@ declare function iniciar_plugins();
 export class ComfirmarRegistroComponent implements OnInit {
 
     usuario: Usuario;
+    cargando: boolean = false;
+    reenvio: boolean = false;
 
     constructor(
-        public _usuarioService: UsuarioService
+        public _usuarioService: UsuarioService,
+        public activatedRoute: ActivatedRoute,
+        public router: Router,
     ) { 
-        this.usuario = _usuarioService.usuarioPendienteDeConfirmación;
+        this.usuario = this._usuarioService.usuario;
+        activatedRoute.params.subscribe(params => {
+            const user_id = params['user_id'];
+            console.log(user_id);
+            if (user_id ) {
+                this.reenviarEmail(user_id);
+            }
+            
+        });
+        
     }
 
     ngOnInit() {
         iniciar_plugins();
-    }
-
-    reenviarEmail() {
-        console.log('hola');
-        this._usuarioService.reenviarEmail(this.usuario)
-            .subscribe(resp => console.log(resp));
-    }
-
-    public modificarEmailyReenviar(email: string): void {
-
-        this.usuario.email = email;
+        console.log(this._usuarioService.reenvio);
+        this.reenvio = this._usuarioService.reenvio;
         
+    }
 
+    reenviarEmail(user_id) {
+        this.cargando = true;
+        this.reenvio =  true;
+        this._usuarioService.reenviarEmail(user_id)
+            .subscribe((resp) => {
+                console.log(resp);
+                this.usuario = resp.usuario;
+                this.cargando = false;
+            });
+    }
+
+    public modificarEmailyReenviar(email: string) {
+
+        this.cargando = true;
+        this.usuario.email = email;
+        this.reenvio = true;
 
         this._usuarioService.modificarEmailyReenviar(this.usuario)
-            .subscribe(resp => console.log(resp));
+            .subscribe(resp => {
+                
+                this.usuario = resp.usuario;
+                this.cargando = false;
+            });
        
     }
     

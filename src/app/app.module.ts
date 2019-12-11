@@ -7,7 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { PreviousRegisterComponent } from './login/previous-register.component';
-
+import { ConfirmarEmailComponent } from './login/confirmar-email.component';
+import { ComfirmarRegistroComponent } from './login/comfirmar-registro.component';
 
 // RUTAS
 
@@ -21,9 +22,10 @@ import { PagesModule } from './pages/pages.module';
 // SERVICIOS
 import { ServiceModule } from './services/service.module';
 import { SharedModule } from './shared/shared.module';
-import { ComfirmarRegistroComponent } from './login/comfirmar-registro.component';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ConfReenvioComponent } from './login/conf-reenvio.component';
+
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FooterComponent,
     RegisterComponent,
     PreviousRegisterComponent,
-    ComfirmarRegistroComponent
+    ComfirmarRegistroComponent,
+    ConfirmarEmailComponent,
+    ConfReenvioComponent
   ],
   imports: [
     BrowserModule,
