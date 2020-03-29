@@ -31,6 +31,10 @@ export class NavbarService {
         //     url: '/contacto',
         //     submenu: []
         // },
+       
+    ];
+
+    panelUsuario: any = [
         {
             titulo: '+ Mi CanAdopta',
             url: '/',
@@ -38,10 +42,14 @@ export class NavbarService {
                 {titulo: 'Perfil', icono: 'flaticon-internet', url: ''},
                 {titulo: 'Mis mascotas', icono: 'fa fa-paw', url: ''},
                 {titulo: 'Subir macosta', icono: 'flaticon-cross', url: ''},
-                {titulo: 'Cerrar sesión', icono: 'flaticon-exit', url: '/login'}
+                // {titulo: 'Cerrar sesión', icono: 'flaticon-exit', url: '/login'}
             ]
         }
-    ];
+    ]
 
   constructor() { }
+
+  cargarPanelUsuario() {
+        return this.panelUsuario;
+  }
 }

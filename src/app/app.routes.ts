@@ -8,18 +8,18 @@ import { RegisterComponent } from './login/register.component';
 import { PreviousRegisterComponent } from './login/previous-register.component';
 import { ComfirmarRegistroComponent } from './login/comfirmar-registro.component';
 import { ConfirmarEmailComponent } from './login/confirmar-email.component';
-import { ConfReenvioComponent } from './login/conf-reenvio.component';
+import { RegisterCentroComponent } from './login/register-centro.component';
 
 
 const appRoutes: Routes = [
 
     { path: 'login', component: LoginComponent },
     { path: 'prev_registro', component: PreviousRegisterComponent },
-    { path: 'conf_registro', component: ComfirmarRegistroComponent },
-    { path: 'conf_registro/:user_id', component: ComfirmarRegistroComponent },
-    { path: 'conf_reenvio/:user_id', component: ConfReenvioComponent },
-    { path: 'confirmar_email/:user_id', component: ConfirmarEmailComponent },
+    // { path: 'conf_registro', component: ComfirmarRegistroComponent },
+    // { path: 'conf_registro/:user_id', component: ComfirmarRegistroComponent },
+    // { path: 'confirmar_email/:user_id', component: ConfirmarEmailComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'register_centro', component: RegisterCentroComponent },
     { path: '**', component: NopagefoundComponent  },
     
 ];

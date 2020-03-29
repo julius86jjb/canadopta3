@@ -8,13 +8,15 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { PipesModule } from '../pipes/pipes.module';
 
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
-        SweetAlert2Module
+        SweetAlert2Module,
+        PipesModule
     ],
     declarations: [
         NopagefoundComponent,

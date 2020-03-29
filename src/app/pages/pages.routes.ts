@@ -6,6 +6,8 @@ import { ColaboraComponent } from './colabora/colabora.component';
 import { ContactoComponent } from './contacto/contacto.component';
 import { PagesComponent } from './pages.component';
 import { HomeComponent } from './home/home.component';
+import { HomeUsersComponent } from './home-users/home-users.component';
+import { LoginGuardGuard } from '../services/service.index';
 
 const PagesRoutes: Routes = [
     {
@@ -17,6 +19,7 @@ const PagesRoutes: Routes = [
             { path: 'centros', component: CentrosComponent, data : {titulo: 'CanAdopta - Centros de Adopción'}  },
             { path: 'colabora', component: ColaboraComponent, data : {titulo: 'CanAdopta - Colabora'}  },
             { path: 'contacto', component: ContactoComponent, data : {titulo: 'CanAdopta - Contacto'}  },
+            { path: 'dashboard', component: HomeUsersComponent, data : {titulo: 'CanAdopta - Dashboard'},  canActivate: [LoginGuardGuard]   },
             { path: '', redirectTo: '/home', pathMatch: 'full' }
         ]
     },

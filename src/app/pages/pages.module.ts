@@ -14,6 +14,8 @@ import { SharedModule } from '../shared/shared.module';
 import { PAGES_ROUTES } from './pages.routes';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { PipesModule } from '../pipes/pipes.module';
+import { HomeUsersComponent } from './home-users/home-users.component';
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         CentrosComponent,
         PagesComponent,
         ColaboraComponent,
-        ContactoComponent
+        ContactoComponent,
+        HomeUsersComponent,
     ],
     exports: [
         HomeComponent,
@@ -35,7 +38,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         SharedModule,
         PAGES_ROUTES,
         FormsModule,
-        SweetAlert2Module
+        SweetAlert2Module,
+        PipesModule
     ]
 })
 

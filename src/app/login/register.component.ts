@@ -5,8 +5,11 @@ import Swal from 'sweetalert2';
 import { UsuarioService } from '../services/service.index';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { LoginService } from '../services/usuario/login.service';
 
 declare function iniciar_plugins();
+declare const  gapi: any;
+
 
 @Component({
   selector: 'app-register',
@@ -44,11 +47,13 @@ export class RegisterComponent implements OnInit {
 
     forma: FormGroup;
     cargando: boolean = false;
+    auth2: any;
 
 
     constructor(
         public _usuarioService: UsuarioService,
-        public router: Router
+        public router: Router,
+        public _loginService: LoginService
     ) { }
 
     sonIguales(campo1: string, campo2: string) {
@@ -69,6 +74,7 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit() {
         iniciar_plugins();
+        this.googleInit();
 
         this.forma = new FormGroup({
             nombre: new FormControl(null, Validators.required ),
@@ -114,9 +120,9 @@ export class RegisterComponent implements OnInit {
         this.cargando = true;
         this._usuarioService.crearUsuario(usuario)
             .subscribe( resp => {
-                this.router.navigate(['/conf_registro'])
+                this.router.navigate(['/login'])
                 this.cargando = false;
-            } );
+            },(err) => this.cargando = false );
     }
 
 
@@ -127,7 +133,37 @@ export class RegisterComponent implements OnInit {
                     return res ? null : { emailTaken: true };
                   })
             );
-        }
+    }
+
+
+    googleInit() {
+        gapi.load('auth2', () => {
+            this.auth2 = gapi.auth2.init({
+                clientId: '1023152870500-glc3619p64kein5ep5igdvtfhs7jngkd.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                scope: 'profile email'
+            });
+
+            this.attachSignin(document.getElementById('btnGoogle') );
+
+        });
+    }
+
+    attachSignin(element) {
+        this.auth2.attachClickHandler(element, {}, (googleUser) => {
+            // const profile = googleUser.getBasicProfile();
+
+            const token = googleUser.getAuthResponse().id_token;
+
+            this._loginService.loginGoogle(token)
+                .subscribe( () => {
+                    this.router.navigate(['/dashboard']);
+                    // Correción sugerida porque no cargaba bien el diseño del template:
+                    // window.location.href = '#/dashboard';
+                });
+        });
+
+    }
 
 
 }

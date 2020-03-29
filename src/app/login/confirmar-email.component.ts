@@ -31,12 +31,14 @@ export class ConfirmarEmailComponent implements OnInit {
   }
 
   confirmarEmail(user_id) {
-    this.cargando = true
     this._usuarioService.confirmarEmail(user_id)
         .subscribe((resp) => {
-            
             this.cargando = false;
-        });
+            this.router.navigate(['/login']);
+            
+        },
+            (err) => this.cargando = false 
+        );
   }
 
 }

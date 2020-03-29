@@ -43,23 +43,25 @@
 
                         <div class="form-group mb-4">
 
-                            <button type="button" class="btn btn-danger bomd" style="width:100%"><i class="fa fa-google" aria-hidden="true"></i>
-                                Inicia sesión con Google</button>
+                            <button type="button" class="btn btn-danger bomd" style="width:100%" id="btnGoogle">
+                                <i class="fa fa-google" aria-hidden="true"></i>
+                                Inicia sesión con Google
+                            </button>
                         </div>
                         <!-- Name -->
                         <h5 class="mb-4" style="font-size: 15px;">O inicia sesión con tu correo eléctronico</h5>
                         <!-- Form start -->
-                        <form class="form-horizontal form-material" (ngSubmit)="ingresar()" novalidate>
+                        <form ngNativeValidate #f="ngForm" class="form-horizontal form-material" (ngSubmit)="ingresar(f)" novalidate>
                             <div class="form-group">
-                                <input type="email" class="input-text" placeholder="Email">
+                                <input [ngModel]="email" type="email" name="email" class="input-text" placeholder="Email" required>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="input-text" placeholder="Contraseña">
+                                <input ngModel type="password" name="password" class="input-text" placeholder="Contraseña" required>
                             </div>
                             <div class="checkbox">
                                 <div class="ez-checkbox pull-left">
                                     <label>
-                                            <input type="checkbox" class="ez-hide">
+                                            <input [(ngModel)]="recuerdame" name="recuerdame" type="checkbox" class="ez-hide">
                                             Recuérdame
                                         </label>
                                 </div>

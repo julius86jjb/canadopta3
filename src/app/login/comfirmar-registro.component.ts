@@ -38,7 +38,7 @@ export class ComfirmarRegistroComponent implements OnInit {
         this.usuario = this._usuarioService.usuario;
         activatedRoute.params.subscribe(params => {
             const user_id = params['user_id'];
-            console.log(user_id);
+
             if (user_id ) {
                 this.reenviarEmail(user_id);
             }
@@ -46,6 +46,10 @@ export class ComfirmarRegistroComponent implements OnInit {
         });
         
     }
+
+
+
+    /// corregir erro de confirmar cuenta cuando hemos cambiado de email y podemos activar con email antiguo
 
     ngOnInit() {
         iniciar_plugins();
@@ -62,21 +66,37 @@ export class ComfirmarRegistroComponent implements OnInit {
                 console.log(resp);
                 this.usuario = resp.usuario;
                 this.cargando = false;
-            });
+            },(err) => this.cargando = false );
     }
 
     public modificarEmailyReenviar(email: string) {
 
         this.cargando = true;
+        this._usuarioService.borrarEnRegistro(this.usuario._id)
+            .subscribe(resp => console.log(resp))
+
+        
         this.usuario.email = email;
         this.reenvio = true;
+        console.log(this.usuario);
+        let nuevo_usuario = new Usuario(
+            this.usuario.nombre,
+            this.usuario.apellidos,
+            this.usuario.email,
+            this.usuario.password,
+            false
+        )
 
-        this._usuarioService.modificarEmailyReenviar(this.usuario)
-            .subscribe(resp => {
-                
-                this.usuario = resp.usuario;
-                this.cargando = false;
-            });
+        this._usuarioService.crearUsuario(nuevo_usuario)
+            .subscribe((resp:any) => {
+                console.log(resp);
+                this._usuarioService.reenviarEmail(resp._id)
+                    .subscribe((resp) => {
+                        console.log(resp);
+                        this.usuario = resp.usuario;
+                        this.cargando = false;
+                },(err) => this.cargando = false );
+            },(err) => this.cargando = false );
        
     }
     

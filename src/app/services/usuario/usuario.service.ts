@@ -17,13 +17,12 @@ export class UsuarioService {
     usuario: Usuario;
     reenvio: boolean;
 
-  constructor(
-      public http: HttpClient,
-      private router: Router,
-      private zone: NgZone
-  ) {
-   }
-
+    constructor(
+        public http: HttpClient,
+        private router: Router,
+        private zone: NgZone
+    ) {
+    }
 
 
     crearUsuario(usuario: Usuario) {
@@ -33,7 +32,7 @@ export class UsuarioService {
         return this.http.post(url, usuario)
             .pipe(
                 map( (resp: any) =>{
-                    this.reenvio = false;
+                    Swal.fire('Usuario creado', usuario.email, 'success');
                     this.usuario =  resp.usuario;
                     return resp.usuario
                 }),
@@ -71,6 +70,7 @@ export class UsuarioService {
                 map( (resp: any) => {
                     this.reenvio = true;
                     this.usuario = resp.usuario;
+                    console.log(this.usuario);
                     return resp;
                     
                    
@@ -83,8 +83,8 @@ export class UsuarioService {
                         Swal.fire({
                             icon: 'success',
                             title: 'Inicie Sesión',
-                            text: err.error.mensaje,
-                            confirmButtonText:'Iniciar Sesión',
+                            text: 'Su cuenta fue activada anteriormente. Inicie sesión con la dirección de email a través de la cual activó su cuenta',
+                            confirmButtonText:'Aceptar',
                             confirmButtonColor: '#b3c211'
                         })
                         return throwError(err);
@@ -93,10 +93,10 @@ export class UsuarioService {
             );
     }
 
-    modificarEmailyReenviar(usuario: Usuario) {
+    actualizarUsuario(usuario: Usuario) {
 
 
-        const url = URL_SERVICIOS + '/usuario/modificarEmailreenviar/' + usuario._id;
+        let url = URL_SERVICIOS + '/usuario/' + usuario._id;
         
         return this.http.put(url,usuario)
             .pipe(
@@ -106,28 +106,11 @@ export class UsuarioService {
                     return resp;
                 }),
                 catchError(err => {
-                    if (err.status === 409) {
-                       
-                        
-
-                        this.router.navigate(['/login']);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Su cuenta ya fue activada anteriormente',
-                            text: err.error.mensaje,
-                            confirmButtonText:'Aceptar',
-                            confirmButtonColor: '#b3c211'
-                        })
-                        return throwError(err);
-                    }
-
+                    this.router.navigate(['/register']);
                     if(err) {
-                        
-
-                        this.router.navigate(['/login']);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al reenviar el email',
+                            title: 'Error al actualizar el usuario',
                             text: err.error.mensaje,
                             confirmButtonText:'Aceptar',
                             confirmButtonColor: '#b3c211'
@@ -145,11 +128,11 @@ export class UsuarioService {
         return this.http.get(url)
         .pipe(
             map( (resp: any) => {
-                this.router.navigate(['/login']);
+                
                 Swal.fire({
                     icon: 'success',
                     title: 'Cuenta Activada',
-                    text: 'Su cuenta ha sido activada, ahora ya puede iniciar sesión',
+                    text: resp.usuario.email,
                     confirmButtonText:'Aceptar',
                     confirmButtonColor: '#b3c211'
                 })
@@ -158,7 +141,7 @@ export class UsuarioService {
             }),
             catchError(err => {
                 if(err.status === 414) {
-                    
+                    console.log(err); 
                     this.router.navigate(['/login']);
                     Swal.fire({
                         title: 'Error al activar su cuenta',
@@ -175,14 +158,25 @@ export class UsuarioService {
                     });
                     return throwError(err);
                 }
-                if(err) {
-                    
+                if(err.status === 415) {
 
+                    this.router.navigate(['/register']);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Error al activar su cuenta',
+                        text: 'No ha sido posible encontrar un usuario con esa dirección de email',
+                        confirmButtonText:'Aceptar',
+                        confirmButtonColor: '#b3c211'
+                    })
+                    return throwError(err);
+                }
+                if(err.status === 416) {
+                    console.log(err); 
                     this.router.navigate(['/login']);
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error al activar su cuenta',
-                        text: err.error.mensaje,
+                        icon: 'success',
+                        title: 'Inicie Sesión',
+                        text: 'La cuenta ya fue activada anteriormente, inicie Sesión con su dirección de email',
                         confirmButtonText:'Aceptar',
                         confirmButtonColor: '#b3c211'
                     })
@@ -191,6 +185,37 @@ export class UsuarioService {
             })
         );
     }
+
+    // borrarUsuario( id: string) {
+
+    //     const url = URL_SERVICIOS + '/usuario/' + id + '?token=' + this.token;
+
+    //     return this.http.delete(url)
+    //         .pipe(
+    //             map( resp => {
+    //                 swal('Usuario borrado', 'El usuario ha sido borrado correctamente', 'success');
+    //                 return true;
+    //             })
+    //         );
+    // }
+
+    borrarEnRegistro( id: string) {
+
+        const url = URL_SERVICIOS + '/usuario/borrarEnRegistro/' + id;
+
+        return this.http.get(url)
+            .pipe(
+                map( (resp:any) => {
+                    console.log(resp);
+                    return resp.usuario;
+                })
+            );
+    }
+    
+
+
+
+    
 
 
 }

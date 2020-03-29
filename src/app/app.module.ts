@@ -24,7 +24,9 @@ import { ServiceModule } from './services/service.module';
 import { SharedModule } from './shared/shared.module';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { ConfReenvioComponent } from './login/conf-reenvio.component';
+import { RegisterCentroComponent } from './login/register-centro.component';
+
+
 
 
 
@@ -37,7 +39,7 @@ import { ConfReenvioComponent } from './login/conf-reenvio.component';
     PreviousRegisterComponent,
     ComfirmarRegistroComponent,
     ConfirmarEmailComponent,
-    ConfReenvioComponent
+    RegisterCentroComponent
   ],
   imports: [
     BrowserModule,

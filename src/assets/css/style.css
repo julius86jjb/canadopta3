@@ -852,10 +852,10 @@ input[type=checkbox]:checked+label:before {
 .main-header .navbar-expand-lg .navbar-nav .nav-link {
     padding: 33px 15px 27px;
     line-height: 20px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #6c6d6f;
-    font-family: 'Lato';
+    font-size: 12px;
+    font-weight: 600;
+    color: #515151;
+    text-transform: uppercase;
 }
 
 .main-header .navbar-expand-lg .navbar-nav .link-color:hover {
@@ -893,15 +893,14 @@ input[type=checkbox]:checked+label:before {
 .main-header .dropdown-menu {
     min-width: 10rem;
     padding: 0;
-    margin: -2px;
+    margin: -1px;
     font-size: 14px;
     color: #212529;
-    border: 1px solid transparent;
-    -webkit-transition: opacity .4s ease 0s, visibility .4s linear 0s, -webkit-transform .4s ease 0s;
+    border-bottom: 1px solid rgba(220, 220, 220, .2) -webkit-transition: opacity .4s ease 0s, visibility .4s linear 0s, -webkit-transform .4s ease 0s;
     transition: opacity .4s ease 0s, visibility .4s linear 0s, -webkit-transform .4s ease 0s;
     transition: opacity .4s ease 0s, transform .4s ease 0s, visibility .4s linear 0s;
     transition: opacity .4s ease 0s, transform .4s ease 0s, visibility .4s linear 0s, -webkit-transform .4s ease 0s;
-    border-radius: 0px;
+    border-radius: 5px;
 }
 
 .dropdown .dropdown-item:hover>.dropdown-menu {
@@ -927,8 +926,8 @@ input[type=checkbox]:checked+label:before {
 
 .main-header .dropdown-menu a:hover {
     background: transparent;
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
 }
 
 .inline-search-small {
@@ -3832,7 +3831,7 @@ footer {
 }
 
 .form-content-box2 {
-    max-width: 1000px;
+    max-width: 900px;
     box-shadow: rgba(0, 0, 0, 0.0980392) 0 1px 1px;
     color: #7c7c7c;
     margin: 50px auto;
